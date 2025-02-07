@@ -7,11 +7,12 @@ const fugaz = Fugaz_One({
 });
 
 export default function Button(props) {
-  const { text, dark, full } = props;
+  const { text, dark, full, handleClick } = props;
   return (
     <button
+      onClick={handleClick}
       className={
-        "border border-2 border-solid overflow-hidden duration-200 hover:opacity-60 rounded-full border-indigo-600 " +
+        "border-2 border-solid overflow-hidden duration-200 hover:opacity-60 rounded-full border-indigo-600 " +
         (dark ? " text-white bg-indigo-600 " : " text-indigo-600") + (full ? " grid place-items-center w-full" : " ")
       }
     >

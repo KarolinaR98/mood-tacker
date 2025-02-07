@@ -1,5 +1,7 @@
+"use client";
+
 import { gradients, baseRating } from "@/utils";
-import React from "react";
+import React, { useState } from "react";
 
 const months = {
   January: "Jan",
@@ -27,33 +29,35 @@ const dayList = [
   "Saturday",
 ];
 
-const data = {
-  15: 2,
-  16: 4,
-  17: 1,
-  18: 3,
-  19: 5,
-  20: 2,
-  21: 4,
-  22: 1,
-  23: 3,
-  24: 5,
-};
-
 export default function Callendar(props) {
-  const { demo } = props;
-  const year = 2024;
-  const month = "July";
-  const monthNow = new Date(year, Object.keys(months).indexOf(month), 1);
+  const { demo, completeData, handleSetMood } = props;
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const [selectedMonth, setSelectedMonth] = useState(
+    Object.keys(months)[currentMonth]
+  );
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+
+  const monthNow = new Date(
+    selectedYear,
+    Object.keys(months).indexOf(selectedMonth),
+    1
+  );
   const firstDayOfMonth = monthNow.getDay();
   const daysInMonth = new Date(
-    year,
-    Object.keys(months).indexOf(month) + 1,
+    selectedYear,
+    Object.keys(selectedMonth).indexOf(selectedMonth) + 1,
     0
   ).getDate();
 
   const daysToDisplay = firstDayOfMonth + daysInMonth;
   const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0);
+
+  const numericMonth = Object.keys(months).indexOf(selectedMonth);
+  const data = completeData?.[selectedYear]?.[numericMonth] || {};
+
+  function handleIncrementMonth(val) {}
 
   return (
     <div className="flex flex-col overflow-hidden gap-1 py-4 sm:py-6 ms:py-10">
@@ -85,7 +89,7 @@ export default function Callendar(props) {
                 : "white";
               return (
                 <div
-                style={{background: color}}
+                  style={{ background: color }}
                   className={
                     "text-xs sm:text-sm border border-solid p-2 flex items-center gap-2 justify-between rounded-lg " +
                     (isToday ? "border-indigo-400 " : "border-indigo-100 ") +
