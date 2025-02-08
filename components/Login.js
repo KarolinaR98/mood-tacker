@@ -15,13 +15,21 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);
   const [authenticating, setAuthenticating] = useState(false);
+  const [error, setError] = useState("");
 
   const { signup, login } = useAuth();
 
   async function handleSubmit() {
-    if (!email || !password || password.length < 6) {
-      return;
+    setError("")
+    if (!email || !password) {
+      setError("All fields must be filled");
+      return
     }
+    else if ( password.length < 6){
+      setError("Password must be at least 6 characters");
+      return
+    }
+
     setAuthenticating(true)
     try {
       if (isRegister) {
@@ -30,6 +38,7 @@ export default function Login() {
         await login(email, password);
       }
     } catch (err) {
+      setError(err.message)
       console.error(err.message);
     } finally {
       setAuthenticating(false);
@@ -45,16 +54,17 @@ export default function Login() {
       <input
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="max-w-[400px] w-full mx-auto px-4 py-2 sm:py-3 border border-solid border-indigo-400 rounded-full outline-none"
+        className={"max-w-[400px] w-full mx-auto px-4 py-2 sm:py-3 border border-solid border-indigo-400 rounded-full outline-none " + (email === "" && error ? "border-red-600 " : "border-indigo-400 ")}
         placeholder="Email"
       />
       <input
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="max-w-[400px] w-full mx-auto px-4 py-2 sm:py-3 border border-solid border-indigo-400 rounded-full outline-none"
+        className={"max-w-[400px] w-full mx-auto px-4 py-2 sm:py-3 border border-solid  rounded-full outline-none " + ((password === "" || password.length < 6) && error ? "border-red-600 " : "border-indigo-400 ")}
         placeholder="Password"
         type="password"
       />
+      {error && <p className="text-red-600 text-md font-bold">{error}</p>}
       <div className="max-w-[400px] w-full mx-auto">
         <Button handleClick={handleSubmit} text={authenticating ? "Submitting": "Submit"} full />
       </div>

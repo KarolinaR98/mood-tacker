@@ -2,6 +2,7 @@ import { Fugaz_One, Open_Sans } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
+import Logout from "@/components/Logout";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -25,9 +26,7 @@ export default function RootLayout({ children }) {
           Mood Tracker
         </h1>
       </Link>
-      <div className="flex items-center justify-between">
-        Placeholder || stats
-      </div>
+     <Logout/>
     </header>
   );
 
